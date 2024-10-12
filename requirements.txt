@@ -1,0 +1,5 @@
+langchain
+langgraph
+gradio
+ollama
+langchain-community
