@@ -47,7 +47,6 @@ def user_input_agent(state: State, llm):
         # If JSON parsing fails, keep the original user_data
         pass
     state["messages"].append(AIMessage(content=f"Processed user profile: {json.dumps(state['user_data'], indent=2)}"))
-    print("Exiting user_input_agent")
     return state
 
 # Routine Generation Agent
@@ -191,13 +190,14 @@ class AIFitnessCoach:
         return final_state["messages"]
 
 # Helper function for Gradio interface
-def process_user_input(age, weight, gender, primary_goal, target_timeframe, workout_preferences, 
+def process_user_input(age, weight, height, gender, primary_goal, target_timeframe, workout_preferences, 
                        workout_duration, workout_days, activity_level, health_conditions, 
                        dietary_preferences):
     print("Processing user input")
     user_data = {
         "age": age,
         "weight": weight,
+        "height": height,
         "gender": gender,
         "primary_goal": primary_goal,
         "target_timeframe": target_timeframe,
@@ -222,6 +222,7 @@ with gr.Blocks() as demo:
         with gr.Row():
             age = gr.Number(label="Age")
             weight = gr.Number(label="Weight (kg)")
+            height = gr.Number(label="Height (cm)")
             gender = gr.Radio(["Male", "Female", "Other"], label="Gender")
         
         primary_goal = gr.Dropdown(["Weight loss", "Muscle gain", "Endurance improvement", "General fitness"], label="Primary Goal")
@@ -249,7 +250,7 @@ with gr.Blocks() as demo:
 
         create_button.click(
             process_user_input,
-            inputs=[age, weight, gender, primary_goal, target_timeframe, workout_preferences, 
+            inputs=[age, weight, height, gender, primary_goal, target_timeframe, workout_preferences, 
                     workout_duration, workout_days, activity_level, health_conditions, 
                     dietary_preferences],
             outputs=plan_output
